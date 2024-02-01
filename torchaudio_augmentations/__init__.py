@@ -13,3 +13,6 @@ from .augmentations.random_resized_crop import RandomResizedCrop
 # from .augmentations.reverb import Reverb
 from .augmentations.reverse import Reverse
 from .augmentations.room_impulse_response import RandomRIR
+
+from .augmentations.add_background_noise import RandomBackgroundNoise
+from .augmentations.encoder import RandomEncoder
