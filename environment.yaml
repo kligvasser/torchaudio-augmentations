@@ -1,0 +1,26 @@
+name: audio-augment
+channels:
+  - pytorch
+  - defaults
+dependencies:
+  - python=3.8.5
+  - pip=23.3
+  - cudatoolkit=11.8
+  - pip:
+    - torch
+    - torchvision
+    - torchaudio
+    - torchlibrosa
+    - opencv-python
+    - numpy
+    - librosa
+    - pandas
+    - scipy
+    - tqdm
+    - seaborn
+    - scikit-learn
+    - transformers<=4.30.2
+    - ipython
+    - black
+    - julius
+    - torch-pitch-shift

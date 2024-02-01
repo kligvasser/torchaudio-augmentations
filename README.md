@@ -10,6 +10,7 @@ Audio data augmentations library for PyTorch for audio in the time-domain. The f
 - Easily control stochastic (sequential) audio transformations.
 - Make every audio transformation differentiable with PyTorch's `nn.Module`.
 - Optimise audio transformations for CPU and GPU.
+- *Added RIR, codec and background noise augmentations.*
 
 It supports stochastic transformations as used often in self-supervised, semi-supervised learning methods. One can apply a single stochastic augmentation or create as many stochastically transformed audio examples from a single interface.
 
@@ -26,16 +27,16 @@ audio, sr = torchaudio.load("tests/classical.00002.wav")
 num_samples = sr * 5
 transforms = [
     RandomResizedCrop(n_samples=num_samples),
-    RandomApply([PolarityInversion()], p=0.8),
-    RandomApply([Noise(min_snr=0.001, max_snr=0.005)], p=0.3),
-    RandomApply([Gain()], p=0.2),
+    RandomApply(PolarityInversion() p=0.8),
+    RandomApply(Noise(min_snr=0.001, max_snr=0.005), p=0.3),
+    RandomApply(Gain(), p=0.2),
     HighLowPass(sample_rate=sr), # this augmentation will always be applied in this aumgentation chain!
-    RandomApply([Delay(sample_rate=sr)], p=0.5),
-    RandomApply([PitchShift(
+    RandomApply(Delay(sample_rate=sr), p=0.5),
+    RandomApply(PitchShift(
         n_samples=num_samples,
         sample_rate=sr
-    )], p=0.4),
-    RandomApply([Reverb(sample_rate=sr)], p=0.3)
+    ), p=0.4),
+    RandomApply(Reverb(sample_rate=sr), p=0.3)
 ]
 ```
 
@@ -43,9 +44,9 @@ We can also define a stochastic augmentation on multiple transformations. The fo
 ```python
 transforms = [
     RandomResizedCrop(n_samples=num_samples),
-    RandomApply([PolarityInversion(), Noise(min_snr=0.001, max_snr=0.005)], p=0.8),
-    RandomApply([Gain()], p=0.2),
-    RandomApply([Delay(sample_rate=sr), Reverb(sample_rate=sr)], p=0.5)
+    RandomApplys([PolarityInversion(), Noise(min_snr=0.001, max_snr=0.005)], p=0.8),
+    RandomApply(Gain(), p=0.2),
+    RandomApplys([Delay(sample_rate=sr), Reverb(sample_rate=sr)], p=0.5)
 ]
 ```
 
