@@ -1,4 +1,4 @@
-from .apply import RandomApply
+from .apply import RandomApply, RandomApplys
 from .compose import Compose, ComposeMany
 from .augmentations.delay import Delay
 from .augmentations.gain import Gain
