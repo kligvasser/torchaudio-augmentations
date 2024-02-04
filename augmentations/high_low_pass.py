@@ -1,6 +1,6 @@
 import random
 import torch
-from torchaudio_augmentations import HighPassFilter, LowPassFilter
+from . import HighPassFilter, LowPassFilter
 
 
 class HighLowPass(torch.nn.Module):

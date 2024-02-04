@@ -5,8 +5,13 @@ import torch
 
 import torchaudio.functional as F
 
-import torchaudio_augmentations.augmentations.misc as misc
-from torchaudio_augmentations.augmentations.noise import Noise
+from .misc import (
+    get_files_by_extension,
+    load_audio,
+    downsample_audio,
+    cut_random_segment_repeat,
+)
+from .noise import Noise
 
 
 class RandomBackgroundNoise(torch.nn.Module):
@@ -27,15 +32,15 @@ class RandomBackgroundNoise(torch.nn.Module):
         self.keys = list(self.bank.keys())
 
     def _create_noise_bank(self, root, bank_size, segment_size, sample_rate):
-        wav_list = misc.get_files_by_extension(root)
+        wav_list = get_files_by_extension(root)
 
         self.bank = dict()
         for i in range(bank_size):
             wav_path = random.choice(wav_list)
-            audio, sr = misc.load_audio(wav_path)
+            audio, sr = load_audio(wav_path)
             if sr > sample_rate:
-                audio = misc.downsample_audio(audio, sr, sample_rate)
-            self.bank[i] = misc.cut_random_segment_repeat(audio, segment_size)
+                audio = downsample_audio(audio, sr, sample_rate)
+            self.bank[i] = cut_random_segment_repeat(audio, segment_size)
 
         return
 

@@ -2,7 +2,7 @@ import numpy as np
 import random
 import torch
 
-import torchaudio_augmentations.augmentations.misc as misc
+from .misc import cut_random_segment_zeros, cut_random_segment_repeat
 
 
 class RandomResizedCrop(torch.nn.Module):
@@ -25,7 +25,7 @@ class RandomCrop(torch.nn.Module):
 
     def forward(self, audio):
         if self.pad_type == "zero":
-            audio = misc.cut_random_segment_zeros(audio, self.segment_size)
+            audio = cut_random_segment_zeros(audio, self.segment_size)
         else:
-            audio = misc.cut_random_segment_repeat(audio, self.segment_size)
+            audio = cut_random_segment_repeat(audio, self.segment_size)
         return audio
