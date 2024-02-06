@@ -19,22 +19,32 @@ We can define a single or several audio augmentations, which are applied sequent
 ```python
 from augmentations import *
 
-audio, sr = torchaudio.load("tests/classical.00002.wav")
 
-num_samples = sr * 5
-transforms = [
-    RandomResizedCrop(n_samples=num_samples),
-    RandomApply(PolarityInversion() p=0.8),
-    RandomApply(Noise(min_snr=0.001, max_snr=0.005), p=0.3),
-    RandomApply(Gain(), p=0.2),
-    HighLowPass(sample_rate=sr), # this augmentation will always be applied in this aumgentation chain!
-    RandomApply(Delay(sample_rate=sr), p=0.5),
-    RandomApply(PitchShift(
-        n_samples=num_samples,
-        sample_rate=sr
-    ), p=0.4),
-    RandomApply(Reverb(sample_rate=sr), p=0.3)
-]
+audio, sample_rate = torchaudio.load("tests/classical.00002.wav")
+
+segment_size = sample_rate * 10
+transforms = Compose(
+        [
+            RandomCrop(segment_size=segment_size),
+            RandomApply(
+                RandomBackgroundNoise(
+                    noise_root="/media/klig/disk/datasets/arabic-natural-audio",
+                    sample_rate=sample_rate,
+                    segment_size=segment_size,
+                    bank_size=256,
+                    snr_dbs_range=[20, 30],
+                ),
+                p=0.2,
+            ),
+            RandomApply(RandomRIR(), 0.3),
+            RandomApply(Noise(min_snr=0.001, max_snr=0.005), p=0.3),
+            RandomApply(RandomEncoder(sample_rate=sample_rate), p=0.5),
+        ]
+    )
+
+
+audio_transformed = transforms(audio)
+
 ```
 
 # Cite
