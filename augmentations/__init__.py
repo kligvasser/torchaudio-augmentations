@@ -1,7 +1,7 @@
 from .apply import RandomApply, RandomApplys
 from .compose import Compose, ComposeMany
 from .delay import Delay
-from .gain import Gain
+from .gain import Gain, RandomGain
 from .filter import HighPassFilter, LowPassFilter
 from .high_low_pass import HighLowPass
 from .noise import Noise
