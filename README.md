@@ -13,6 +13,12 @@ It supports stochastic transformations as used often in self-supervised, semi-su
 
 This package follows the conventions set out by `torchvision` and `torchaudio`, with audio defined as a tensor of `[channel, time]`, or a batched representation `[batch, channel, time]`. Each individual augmentation can be initialized on its own, or be wrapped around a `RandomApply` interface which will apply the augmentation with probability `p`.
 
+## Installation
+```
+sudo apt install libsox-dev
+conda env create -f environment.yaml
+conda activate audio
+```
 
 ## Usage
 We can define a single or several audio augmentations, which are applied sequentially to an audio waveform.

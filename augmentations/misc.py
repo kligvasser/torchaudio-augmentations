@@ -2,6 +2,7 @@ import os
 import numpy as np
 import librosa
 import pickle
+import torch
 
 
 def load_dict_from_pickle(file_path):
@@ -44,7 +45,7 @@ def cut_random_segment_repeat(audio, segment_size):
         start_index = np.random.randint(0, original_size - segment_size + 1)
         cut_segment = audio[..., start_index : start_index + segment_size]
     else:
-        repeat_factor = segment_size // original_size
+        repeat_factor = int(np.ceil(segment_size / original_size))
         repeated_audio = np.tile(audio, repeat_factor)
         cut_segment = repeated_audio[..., :segment_size]
 
@@ -63,3 +64,20 @@ def cut_random_segment_zeros(audio, segment_size):
         cut_segment = repeated_audio[..., :segment_size]
 
     return cut_segment
+
+
+def numpy_to_tensor(arr):
+    if isinstance(arr, np.ndarray):
+        tensor = torch.from_numpy(arr)
+        if tensor.dim() == 1:
+            tensor = tensor.unsqueeze(0)
+        return tensor
+    else:
+        return arr
+
+
+def tensor_to_numpy(tensor):
+    if isinstance(tensor, torch.Tensor):
+        return tensor.detach().cpu().squeeze().numpy()
+    else:
+        return tensor

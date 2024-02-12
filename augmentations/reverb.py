@@ -1,5 +1,6 @@
-import augment
 import torch
+from .effects import EffectChain
+from .misc import numpy_to_tensor, tensor_to_numpy
 
 
 class Reverb(torch.nn.Module):
@@ -38,15 +39,17 @@ class Reverb(torch.nn.Module):
             self.room_size_min, self.room_size_max, size=(1,)
         ).item()
 
-        num_channels = audio.shape[0]
+        audio_t = numpy_to_tensor(audio)
+        num_channels = audio_t.shape[0]
         effect_chain = (
-            augment.EffectChain()
+            EffectChain()
             .reverb(reverberance, dumping_factor, room_size)
             .channels(num_channels)
         )
 
-        audio = effect_chain.apply(
-            audio, src_info=self.src_info, target_info=self.target_info
+        audio_t = effect_chain.apply(
+            audio_t, src_info=self.src_info, target_info=self.target_info
         )
+        audio = tensor_to_numpy(audio_t)
 
         return audio

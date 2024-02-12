@@ -1,4 +1,4 @@
-name: audio-augment
+name: audio
 channels:
   - pytorch
   - defaults
@@ -13,15 +13,21 @@ dependencies:
     - torchlibrosa
     - opencv-python
     - numpy
+    - imageio==2.9.0
+    - imageio-ffmpeg==0.4.2
     - librosa
     - pandas
     - scipy
     - tqdm
+    - tensorboard
+    - tensorboardX
+    - torch-tb-profiler
     - seaborn
     - scikit-learn
-    - transformers<=4.30.2
+    - transformers
     - ipython
+    - ipykernel
     - black
+    - h5py
     - julius
     - torch-pitch-shift
-    - ipykernel

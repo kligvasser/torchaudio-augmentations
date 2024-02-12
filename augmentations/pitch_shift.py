@@ -1,6 +1,8 @@
 import random
 import torch
-import augment
+
+from .effects import EffectChain
+from .misc import numpy_to_tensor, tensor_to_numpy
 
 
 class PitchShift:
@@ -15,7 +17,7 @@ class PitchShift:
 
     def process(self, x):
         n_steps = random.randint(self.pitch_shift_cents_min, self.pitch_shift_cents_max)
-        effect_chain = augment.EffectChain().pitch(n_steps).rate(self.sample_rate)
+        effect_chain = EffectChain().pitch(n_steps).rate(self.sample_rate)
         num_channels = x.shape[0]
         target_info = {
             "channels": num_channels,
@@ -39,9 +41,11 @@ class PitchShift:
         return y
 
     def __call__(self, audio):
-        if audio.ndim == 3:
-            for b in range(audio.shape[0]):
-                audio[b] = self.process(audio[b])
-            return audio
+        audio_t = numpy_to_tensor(audio)
+        if audio_t.ndim == 3:
+            for b in range(audio_t.shape[0]):
+                audio_t[b] = self.process(audio_t[b])
         else:
-            return self.process(audio)
+            audio_t = self.process(audio_t)
+
+        return tensor_to_numpy(audio_t)

@@ -1,5 +1,6 @@
 import torch
-import random
+
+from .misc import numpy_to_tensor, tensor_to_numpy
 
 
 class PolarityInversion(torch.nn.Module):
@@ -7,5 +8,7 @@ class PolarityInversion(torch.nn.Module):
         super().__init__()
 
     def forward(self, audio):
-        audio = torch.neg(audio)
+        audio_t = numpy_to_tensor(audio)
+        audio_t = torch.neg(audio_t)
+        audio = tensor_to_numpy(audio_t)
         return audio
