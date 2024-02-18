@@ -59,7 +59,7 @@ def cut_random_segment_zeros(audio, segment_size):
         start_index = np.random.randint(0, original_size - segment_size + 1)
         cut_segment = audio[..., start_index : start_index + segment_size]
     else:
-        pad_size = segment_size - original_size
+        pad_size = segment_size - original_size + 1
         repeated_audio = pad_zeros_last_axis(audio, pad_size)
         cut_segment = repeated_audio[..., :segment_size]
 
